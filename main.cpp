@@ -4,7 +4,6 @@
 #include <ctime>
 #include <cstdlib>
 #include <cstring>
-#include <conio.h>
 
 // 用户名 人名 对照表
 // VVsxmja 蔡一锴
@@ -30,18 +29,13 @@ namespace minesweeper {
     int flag_map[ kMaxMapHeight ][ kMaxMapWidth ];
 
     int foc_x = 0, foc_y = 0; // 光标位置，x为纵坐标，y为横坐标
-
+	void PrintScreen( int opt ) ;//事先声明PrintScreen函数 
     bool GetChoice(std::string hint) {
         // 读取y/n，返回1/0
         char choice;
         while (true) {
-            std::cout << hint; // 输出提示信息
-
-            std::cin >> choice; 
-            // 读入单个字符作为玩家选择
-           // if (kbhit()) {
-            //    choice=getch();
-           // }
+            std::cout << hint; // 输出提示信息 
+            std::cin >> choice; // 读入单个字符作为玩家选择
             if (choice == 'y') {
                 return true;
             } else if (choice == 'n') {
@@ -49,14 +43,13 @@ namespace minesweeper {
             }
         }
     }
-
+	
     void PrintWelcome() {
         // 打印欢迎语
         std::cout << "This is a Minesweeper game." << std::endl;
         std::cout << "Type 'y' to start a new game, type 'n' to exit." << std::endl;
         return;
-    }
-
+    } 
     void PlayerLose() {
         // 打印地雷位置
         PrintScreen(1);
@@ -80,8 +73,6 @@ namespace minesweeper {
     void PrintScreen( int opt ) {
         // 输出当前棋盘,opt==0不输出炸弹,opt==1输出炸弹(游戏输了时显示)
         ClearScreen(); // 清屏
-        std::cout << "shit" << endl;
-        std::cout << opt << endl;
         for (int i = 0; i < map_height; ++i) {
             for (int j = 0; j < map_width; ++j) {
                 // 单数位字符，为光标、旗子或空格
@@ -412,7 +403,7 @@ namespace test {
         minesweeper::foc_x = rand() % minesweeper::map_height;
         minesweeper::foc_y = rand() % minesweeper::map_width;
         // 打印正常棋盘
-        minesweeper::PrintScreen(); 
+        minesweeper::PrintScreen(0); 
         // 打开所有格子
         for (int i = 0; i < minesweeper::map_height; ++i) {
             for (int j = 0; j < minesweeper::map_width; ++j) {
@@ -423,7 +414,7 @@ namespace test {
         minesweeper::foc_x = rand() % minesweeper::map_height;
         minesweeper::foc_y = rand() % minesweeper::map_width;
         // 打印打开过的棋盘
-        minesweeper::PrintScreen();
+        minesweeper::PrintScreen(0);
         return;
     }
 }
