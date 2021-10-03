@@ -132,7 +132,10 @@ namespace minesweeper {
                 std::cout << ']';
             } else if (flag_map[ i ][ map_width - 1 ] == 1) {
                 std::cout << ')';
-            }
+            } else {
+            	// 空格
+                std::cout << ' ';
+			}
             std::cout << std::endl;
         }
     }
