@@ -4,6 +4,7 @@
 #include <ctime>
 #include <cstdlib>
 #include <cstring>
+#include <conio.h>
 
 // 用户名 人名 对照表
 // VVsxmja 蔡一锴
@@ -35,7 +36,12 @@ namespace minesweeper {
         char choice;
         while (true) {
             std::cout << hint; // 输出提示信息
-            std::cin >> choice; // 读入单个字符作为玩家选择
+
+            std::cin >> choice; 
+            // 读入单个字符作为玩家选择
+           // if (kbhit()) {
+            //    choice=getch();
+           // }
             if (choice == 'y') {
                 return true;
             } else if (choice == 'n') {
@@ -53,6 +59,7 @@ namespace minesweeper {
 
     void PlayerLose() {
         // 打印地雷位置
+        PrintScreen(1);
         // 打印结束语
         std::cout << "You lose." << std::endl;
         std::cout << "Type 'y' to start another round, type 'n' to exit." << std::endl;
@@ -66,13 +73,15 @@ namespace minesweeper {
     }
 
     void ClearScreen() {
-        std::cout << "\033[2J\033[1;1H";
+        //std::cout << "\033[2J\033[1;1H";
         return;
     }
 
-    void PrintScreen() {
-        // 输出当前棋盘
+    void PrintScreen( int opt ) {
+        // 输出当前棋盘,opt==0不输出炸弹,opt==1输出炸弹(游戏输了时显示)
         ClearScreen(); // 清屏
+        std::cout << "shit" << endl;
+        std::cout << opt << endl;
         for (int i = 0; i < map_height; ++i) {
             for (int j = 0; j < map_width; ++j) {
                 // 单数位字符，为光标、旗子或空格
@@ -93,14 +102,16 @@ namespace minesweeper {
                     std::cout << ' ';
                 }
                 // 偶数位字符，为当前格子信息
-                if (flag_map[ i ][ j ] == -1) {
+                if (opt == 1 && bomb_map[ i ][ j ] == -1 ) {
+                    std::cout << '*';
+                }else if (flag_map[ i ][ j ] == -1) {
                     // 当前格子已打开
                     if (bomb_map[ i ][ j ] == 0) {
                         // 周围无炸弹，显示空格
                         std::cout << ' ';
                     } else if (bomb_map[ i ][ j ] == -1) {
-                        // 当前格子为炸弹，不进行任何显示
-                        std::cout << ' ';
+                        // 当前格子为炸弹
+                            std::cout << ' ';
                     } else {
                         // 周围有炸弹，显示炸弹数
                         std::cout << bomb_map[ i ][ j ];
@@ -294,7 +305,7 @@ namespace minesweeper {
         bool player_first_open_block = true;
         while (true) {
             // 打印棋盘
-            PrintScreen();
+            PrintScreen(0);
             // 读取输入
             char command = GetCommand();
             // 执行操作
