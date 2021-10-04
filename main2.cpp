@@ -6,9 +6,6 @@
 #include <cstring>
 #include <conio.h>
 #include <windows.h>
-// 用户名 人名 对照表
-// VVsxmja 蔡一锴
-// Mistyreed 张天杰
 
 inline int abs(int x) {
     return x >= 0 ? x : -x;
@@ -22,7 +19,7 @@ namespace minesweeper {
     int map_height = 9, map_width = 9;
 
     int bomb_total = 10, bomb_opened = 0;
-    
+
     // 炸弹地图，0 = 周围无炸弹，1~8 = 周围炸弹数， -1 = 炸弹
     int bomb_map[ kMaxMapHeight ][ kMaxMapWidth ];
 
@@ -30,40 +27,41 @@ namespace minesweeper {
     int flag_map[ kMaxMapHeight ][ kMaxMapWidth ];
 
     int foc_x = 0, foc_y = 0; // 光标位置，x为纵坐标，y为横坐标
-	void PrintScreen( int opt ) ;//事先声明PrintScreen函数 
-	void gotoxy(int x,int y){
-		COORD pos;
-		pos.X=x;
-		pos.Y=y;
-		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),pos);
-	}
+
+    void PrintScreen(int opt); // 事先声明PrintScreen函数
+
+    void gotoxy(int x, int y){
+        COORD pos;
+        pos.X = x;
+        pos.Y = y;
+        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
+    }
+
     bool GetChoice(std::string hint) {
         // 读取y/n，返回1/0
         char choice;
+        std::cout << hint; // 输出提示信息
         while (true) {
-            std::cout << hint; // 输出提示信息 
-            
-			//std::cin >> choice; // 读入单个字符作为玩家选择
-		while (1){
-        	if (_kbhit()){//如果有按键按下，则_kbhit()函数返回真
-            choice = _getch();//使用_getch()函数获取按下的键值
-            std::cout << std::endl;
-        	if (choice == 'y') {
-                return true;
-            } else if (choice == 'n') {
-                return false;
-           		}
-			}
-    	}
+            if (_kbhit()) {
+                // 如果有按键按下，则_kbhit()函数返回真
+                choice = _getch(); // 使用_getch()函数获取按下的键值
+                std::cout << std::endl;
+                if (choice == 'y') {
+                    return true;
+                } else if (choice == 'n') {
+                    return false;
+                }
+            }
         }
     }
-	
+
     void PrintWelcome() {
         // 打印欢迎语
         std::cout << "This is a Minesweeper game." << std::endl;
         std::cout << "Type 'y' to start a new game, type 'n' to exit." << std::endl;
         return;
-    } 
+    }
+
     void PlayerLose() {
         // 打印地雷位置
         PrintScreen(1);
@@ -79,15 +77,9 @@ namespace minesweeper {
         return;
     }
 
-    void ClearScreen() {
-        //std::cout << "\033[2J\033[1;1H";
-        return;
-    }
-
-    void PrintScreen( int opt ) {
+    void PrintScreen(int opt) {
         // 输出当前棋盘,opt==0不输出炸弹,opt==1输出炸弹(游戏输了时显示)
-        ClearScreen(); // 清屏
-        gotoxy(0,4);///光标回原点 
+        gotoxy(0,4); // 光标回原点
         for (int i = 0; i < map_height; ++i) {
             for (int j = 0; j < map_width; ++j) {
                 // 单数位字符，为光标、旗子或空格
@@ -133,9 +125,9 @@ namespace minesweeper {
             } else if (flag_map[ i ][ map_width - 1 ] == 1) {
                 std::cout << ')';
             } else {
-            	// 空格
+                // 空格
                 std::cout << ' ';
-			}
+            }
             std::cout << std::endl;
         }
     }
@@ -165,7 +157,7 @@ namespace minesweeper {
         // 周围所有格子都是炸弹
         return true;
     }
-    
+
     void GenerateBomb() {
         // 游戏初始化，开始的格子一定安全
         srand(time(0)); // 置随机种子
@@ -192,7 +184,7 @@ namespace minesweeper {
         }
         return;
     }
-    
+
     void PreCountBomb() {
         // 预处理每个非炸弹格子周围的炸弹数
         for (int i = 0; i < map_height; ++i) {
@@ -227,13 +219,13 @@ namespace minesweeper {
         // 读取并返回单个字符作为玩家命令
         int input_char;
         //std::cin >> input_char;
-        while (1){
-        	if (_kbhit()){//如果有按键按下，则_kbhit()函数返回真
-            input_char = _getch();//使用_getch()函数获取按下的键值
-            std::cout << std::endl;
-            return (char)input_char;
-			}
-    	}	
+        while (true){
+            if (_kbhit()) {//如果有按键按下，则_kbhit()函数返回真
+                input_char = _getch();//使用_getch()函数获取按下的键值
+                std::cout << std::endl;
+                return (char)input_char;
+            }
+        }
     }
 
     bool CheckAllBlockOpened() {
@@ -314,7 +306,7 @@ namespace minesweeper {
         }
         return;
     }
-    
+
     void MainLoop() {
         // 主循环
         bool player_first_open_block = true;
@@ -427,7 +419,7 @@ namespace test {
         minesweeper::foc_x = rand() % minesweeper::map_height;
         minesweeper::foc_y = rand() % minesweeper::map_width;
         // 打印正常棋盘
-        minesweeper::PrintScreen(0); 
+        minesweeper::PrintScreen(0);
         // 打开所有格子
         for (int i = 0; i < minesweeper::map_height; ++i) {
             for (int j = 0; j < minesweeper::map_width; ++j) {
@@ -446,8 +438,5 @@ namespace test {
 int main() {
     std::cout << "MINESWEEPER" << std::endl;
     minesweeper::GameMain();
-    // test::TestPrintScreen();
-    // test::TestPreCountBomb();
-
     return 0;
 }

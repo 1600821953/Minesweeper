@@ -5,10 +5,6 @@
 #include <cstdlib>
 #include <cstring>
 
-// 用户名 人名 对照表
-// VVsxmja 蔡一锴
-// Mistyreed 张天杰
-
 inline int abs(int x) {
     return x >= 0 ? x : -x;
 }
@@ -21,7 +17,7 @@ namespace minesweeper {
     int map_height = 9, map_width = 9;
 
     int bomb_total = 10, bomb_opened = 0;
-    
+
     // 炸弹地图，0 = 周围无炸弹，1~8 = 周围炸弹数， -1 = 炸弹
     int bomb_map[ kMaxMapHeight ][ kMaxMapWidth ];
 
@@ -29,12 +25,14 @@ namespace minesweeper {
     int flag_map[ kMaxMapHeight ][ kMaxMapWidth ];
 
     int foc_x = 0, foc_y = 0; // 光标位置，x为纵坐标，y为横坐标
-	void PrintScreen( int opt ) ;//事先声明PrintScreen函数 
+
+    void PrintScreen(int opt); // 事先声明PrintScreen函数
+
     bool GetChoice(std::string hint) {
         // 读取y/n，返回1/0
         char choice;
         while (true) {
-            std::cout << hint; // 输出提示信息 
+            std::cout << hint; // 输出提示信息
             std::cin >> choice; // 读入单个字符作为玩家选择
             if (choice == 'y') {
                 return true;
@@ -43,13 +41,14 @@ namespace minesweeper {
             }
         }
     }
-	
+
     void PrintWelcome() {
         // 打印欢迎语
         std::cout << "This is a Minesweeper game." << std::endl;
         std::cout << "Type 'y' to start a new game, type 'n' to exit." << std::endl;
         return;
-    } 
+    }
+
     void PlayerLose() {
         // 打印地雷位置
         PrintScreen(1);
@@ -147,7 +146,7 @@ namespace minesweeper {
         // 周围所有格子都是炸弹
         return true;
     }
-    
+
     void GenerateBomb() {
         // 游戏初始化，开始的格子一定安全
         srand(time(0)); // 置随机种子
@@ -174,7 +173,7 @@ namespace minesweeper {
         }
         return;
     }
-    
+
     void PreCountBomb() {
         // 预处理每个非炸弹格子周围的炸弹数
         for (int i = 0; i < map_height; ++i) {
@@ -290,7 +289,7 @@ namespace minesweeper {
         }
         return;
     }
-    
+
     void MainLoop() {
         // 主循环
         bool player_first_open_block = true;
@@ -403,7 +402,7 @@ namespace test {
         minesweeper::foc_x = rand() % minesweeper::map_height;
         minesweeper::foc_y = rand() % minesweeper::map_width;
         // 打印正常棋盘
-        minesweeper::PrintScreen(0); 
+        minesweeper::PrintScreen(0);
         // 打开所有格子
         for (int i = 0; i < minesweeper::map_height; ++i) {
             for (int j = 0; j < minesweeper::map_width; ++j) {
@@ -422,8 +421,5 @@ namespace test {
 int main() {
     std::cout << "MINESWEEPER" << std::endl;
     minesweeper::GameMain();
-    // test::TestPrintScreen();
-    // test::TestPreCountBomb();
-
     return 0;
 }
